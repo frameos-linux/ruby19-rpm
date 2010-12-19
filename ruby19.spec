@@ -3,11 +3,11 @@
 
 Name:		ruby19
 Version:	%{rubyver}%{rubyminorver}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	Ruby License/GPL - see COPYING
 URL:		http://www.ruby-lang.org/
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:	readline readline-devel ncurses ncurses-devel gdbm gdbm-devel glibc-devel tcl-devel tk-devel libX11-devel gcc unzip openssl-devel db4-devel byacc
+BuildRequires:	readline readline-devel ncurses ncurses-devel gdbm gdbm-devel glibc-devel tcl-devel gcc unzip openssl-devel db4-devel byacc
 Source0:	ftp://ftp.ruby-lang.org/pub/ruby/ruby-%{rubyver}-%{rubyminorver}.tar.gz
 Summary:	An interpreter of object-oriented scripting language
 Group:		Development/Languages
@@ -26,6 +26,8 @@ export CFLAGS
 %configure \
   --enable-shared \
   --disable-rpath \
+  --without-X11 \
+  --without-tk \
   --program-suffix=19
 
 make %{?_smp_mflags}
@@ -54,6 +56,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/share/
 
 %changelog
+* Sun Dec 19 2010 Sergio Rubio <rubiojr@frameos.org> - 1.9.2p0-3
+- Disable X11 support
+- Disable tk support
+
 * Fri Dec 17 2010 Sergio Rubio <rubiojr@frameos.org> - 1.9.2p0-2
 - renamed package to ruby19
 - ruby bin renamed to ruby19
