@@ -1,9 +1,9 @@
 %define rubyver		1.9.2
-%define rubyminorver	p180
+%define rubyminorver	p290
 
 Name:		ruby19
 Version:	%{rubyver}%{rubyminorver}
-Release:	3%{?dist}
+Release:	1%{?dist}
 License:	Ruby License/GPL - see COPYING
 URL:		http://www.ruby-lang.org/
 Provides:       ruby(abi) = 1.9
@@ -54,6 +54,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/share/
 
 %changelog
+* Fri Jul 22 2011 Sergio Rubio <rubiojr@frameos.org> - 1.9.2p290-1
+- ruby19.spec
+
 * Fri May 06 2011 Sergio Rubio <rubiojr@frameos.org> - 1.9.2p180-3
 - fixed i386 build
 
