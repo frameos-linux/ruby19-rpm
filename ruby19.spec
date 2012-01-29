@@ -34,7 +34,7 @@ export CFLAGS
 make %{?_smp_mflags}
 
 # Fix libruby linking
-sed -i 's/\(.*LIBRUBYARG_SHARED.*=\).*/\1 "-l:$(libdir)\/lib$(RUBY_SO_NAME).so.$(ruby_version)"/' rbconfig.rb
+sed -i 's/\(.*LIBRUBYARG_SHARED.*=\).*/\1 "-l:lib$(RUBY_SO_NAME).so.$(ruby_version)"/' rbconfig.rb
 
 %install
 rm -rf $RPM_BUILD_ROOT
