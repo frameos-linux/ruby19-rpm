@@ -33,9 +33,6 @@ export CFLAGS
 
 make %{?_smp_mflags}
 
-# Fix libruby linking
-sed -i 's/\(.*LIBRUBYARG_SHARED.*=\).*/\1 "-l:lib$(RUBY_SO_NAME).so.$(ruby_version)"/' rbconfig.rb
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
@@ -43,7 +40,8 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/libruby-static.a
 rm -f $RPM_BUILD_ROOT%{_libdir}/libruby.so
-
+# Fix libruby linking
+sed -i 's/\(.*LIBRUBYARG_SHARED.*=\).*/\1 "$(libdir)\/lib$(RUBY_SO_NAME).so.$(ruby_version)"/' $RPM_BUILD_ROOT%{_libdir}/ruby/1.9.1/%{_arch}-%{_os}/rbconfig.rb
 
 %clean
 rm -rf $RPM_BUILD_ROOT
