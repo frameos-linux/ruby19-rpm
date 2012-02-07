@@ -3,12 +3,12 @@
 
 Name:		ruby19
 Version:	%{rubyver}%{rubyminorver}
-Release:	1%{?dist}
+Release:	2%{?dist}
 License:	Ruby License/GPL - see COPYING
 URL:		http://www.ruby-lang.org/
 Provides:       ruby(abi) = 1.9
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires:	readline readline-devel ncurses ncurses-devel gdbm gdbm-devel glibc-devel tcl-devel gcc unzip openssl-devel db4-devel byacc
+BuildRequires:	readline readline-devel ncurses ncurses-devel gdbm gdbm-devel glibc-devel tcl-devel gcc unzip openssl-devel db4-devel byacc /bin/sed
 Source0:	ftp://ftp.ruby-lang.org/pub/ruby/ruby-%{rubyver}-%{rubyminorver}.tar.gz
 Summary:	An interpreter of object-oriented scripting language
 Group:		Development/Languages
@@ -40,7 +40,8 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/libruby-static.a
 rm -f $RPM_BUILD_ROOT%{_libdir}/libruby.so
-
+# Fix libruby linking
+sed -i 's/\(.*LIBRUBYARG_SHARED.*=\).*/\1 "$(libdir)\/lib$(RUBY_SO_NAME).so.$(ruby_version)"/' $RPM_BUILD_ROOT%{_libdir}/ruby/1.9.1/%{_arch}-%{_os}/rbconfig.rb
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -54,6 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/share/
 
 %changelog
+* Sat Jan 28 2012 Michael Leinartas <mleinartas@gmail.com> - 1.9.2p290-2
+- Fix linking of compiled gem extensions
+
 * Fri Jul 22 2011 Sergio Rubio <rubiojr@frameos.org> - 1.9.2p290-1
 - ruby19.spec
 
