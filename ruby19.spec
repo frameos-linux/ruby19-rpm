@@ -45,7 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/libruby-static.a
 rm -f $RPM_BUILD_ROOT%{_libdir}/libruby.so
 # Fix libruby linking
-sed -i 's/\(.*LIBRUBYARG_SHARED.*=\).*/\1 "$(libdir)\/lib$(RUBY_SO_NAME).so.$(ruby_version)"/' $RPM_BUILD_ROOT%{_libdir}/ruby/1.9.1/%{_arch}-%{_os}/rbconfig.rb
+sed -i 's/\(.*LIBRUBYARG_SHARED.*=\).*/\1 "$(libdir)\/lib$(RUBY_SO_NAME).so.$(ruby_version)"/' $RPM_BUILD_ROOT%{_libdir}/ruby/1.9.1/%{_target}/rbconfig.rb
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -61,6 +61,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Mon Feb 27 2012 Mihael Leinartas <mleinartas@gmail.com> - 1.9.2p290-3
 - Fix mkmf.rb using libruby-static for lib detection
+- Use _target macro to find rbconfig.rb
 
 * Sat Jan 28 2012 Michael Leinartas <mleinartas@gmail.com> - 1.9.2p290-2
 - Fix linking of compiled gem extensions
