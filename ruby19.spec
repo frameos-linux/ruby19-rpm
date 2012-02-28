@@ -3,13 +3,14 @@
 
 Name:		ruby19
 Version:	%{rubyver}%{rubyminorver}
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:	Ruby License/GPL - see COPYING
 URL:		http://www.ruby-lang.org/
 Provides:       ruby(abi) = 1.9
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	readline readline-devel ncurses ncurses-devel gdbm gdbm-devel glibc-devel tcl-devel gcc unzip openssl-devel db4-devel byacc /bin/sed
 Source0:	ftp://ftp.ruby-lang.org/pub/ruby/ruby-%{rubyver}-%{rubyminorver}.tar.gz
+Patch0:         ruby-mkmf_static.patch
 Summary:	An interpreter of object-oriented scripting language
 Group:		Development/Languages
 
@@ -21,6 +22,8 @@ straight-forward, and extensible.
 
 %prep
 %setup -n ruby-%{rubyver}-%{rubyminorver}
+%patch0 -p1
+
 %build
 CFLAGS="$RPM_OPT_FLAGS -Wall -fno-strict-aliasing"
 export CFLAGS
@@ -31,6 +34,7 @@ export CFLAGS
   --without-tk \
   --program-suffix=19
 
+export LD_LIBRARY_PATH=$(pwd)
 make %{?_smp_mflags}
 
 %install
@@ -41,7 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 rm -f $RPM_BUILD_ROOT%{_libdir}/libruby-static.a
 rm -f $RPM_BUILD_ROOT%{_libdir}/libruby.so
 # Fix libruby linking
-sed -i 's/\(.*LIBRUBYARG_SHARED.*=\).*/\1 "$(libdir)\/lib$(RUBY_SO_NAME).so.$(ruby_version)"/' $RPM_BUILD_ROOT%{_libdir}/ruby/1.9.1/%{_arch}-%{_os}/rbconfig.rb
+sed -i 's/\(.*LIBRUBYARG_SHARED.*=\).*/\1 "$(libdir)\/lib$(RUBY_SO_NAME).so.$(ruby_version)"/' $RPM_BUILD_ROOT%{_libdir}/ruby/1.9.1/%{_target}/rbconfig.rb
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -55,6 +59,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_prefix}/share/
 
 %changelog
+* Mon Feb 27 2012 Mihael Leinartas <mleinartas@gmail.com> - 1.9.2p290-3
+- Fix mkmf.rb using libruby-static for lib detection
+- Use _target macro to find rbconfig.rb
+
 * Sat Jan 28 2012 Michael Leinartas <mleinartas@gmail.com> - 1.9.2p290-2
 - Fix linking of compiled gem extensions
 
